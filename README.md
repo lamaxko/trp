@@ -40,7 +40,7 @@ iwr -useb https://raw.githubusercontent.com/lamaxko/trp/main/install.ps1 | iex
    py script.py
    ```
 
-2️⃣ **Use `nvim <TAB>` to autocomplete errors**:
+2️⃣ **Use `nvim <TAB>` to autocomplete the paths shown in the error**:
    ```sh
    nvim <TAB>
    ```
@@ -50,7 +50,7 @@ iwr -useb https://raw.githubusercontent.com/lamaxko/trp/main/install.ps1 | iex
    ~/some/path/another.py +10
    ```
 
-3️⃣ **Open an error directly in `nvim`**:
+3️⃣ **Open the problematic file directly in `nvim`, by hitting `<ENTER>`**:
    ```sh
    nvim ~/some/path/script.py +2
    ```
