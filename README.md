@@ -5,30 +5,29 @@ Works on **Mac, Linux (Zsh), and Windows (PowerShell).**
 
 ---
 
-## **📂 File Structure**
-```
-trp/
-│── install.sh      # Installer for Mac/Linux (Zsh)
-│── install.ps1     # Installer for Windows (PowerShell)
-│── trp.py          # Core script that extracts errors
-│── README.md       # Usage instructions
-```
-
----
-
 ## **📥 Installation**
 ### **Mac & Linux (Zsh)**
 ```sh
 git clone https://github.com/lamaxko/trp.git
+```
+```sh
 cd trp
+```
+```sh
 chmod +x install.sh
+```
+```sh
 ./install.sh
+```
+```sh
 source ~/.zshrc
 ```
 
 ### **Windows (PowerShell)**
 ```powershell
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+```
+```powershell
 iwr -useb https://raw.githubusercontent.com/lamaxko/trp/main/install.ps1 | iex
 ```
 🔄 **Restart PowerShell after installation.**
@@ -36,9 +35,9 @@ iwr -useb https://raw.githubusercontent.com/lamaxko/trp/main/install.ps1 | iex
 ---
 
 ## **🚀 Usage**
-1️⃣ **Run a Python script that throws an error**:
+1️⃣ **Run your Python script that throws an error**:
    ```sh
-   python3 script.py  # Or python script.py on Windows
+   py script.py
    ```
 
 2️⃣ **Use `nvim <TAB>` to autocomplete errors**:
@@ -75,5 +74,5 @@ Remove-Item -Path C:\trp -Recurse -Force
 
 ---
 
-### **🚀 Now You Can Instantly Open Errors in `nvim`!**  
-Try it out & speed up debugging! 🔥
+### **🚀 Now You Can Instantly Navigate to Errors in `nvim`!**  
+Try it out & speed up your debugging! 🔥
