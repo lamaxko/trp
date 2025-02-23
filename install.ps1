@@ -1,7 +1,10 @@
-$TrpPath = "C:\trp\trp.py"
-$TrpExe = "C:\trp\trp.exe"
+# Set paths to user's home directory instead of C:\
+$TrpDir = "$env:USERPROFILE\trp"
+$TrpPath = "$TrpDir\trp.py"
+$TrpExe = "$TrpDir\trp.bat"
 $TrpErrors = "$env:TEMP\trp_errors.txt"
 $ProfilePath = $PROFILE
+$RepoURL = "https://raw.githubusercontent.com/lamaxko/trp/main/trp.py"
 
 Write-Host "Installing trp..."
 
@@ -11,32 +14,32 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-# Ensure trp directory exists
-if (-not (Test-Path "C:\trp")) {
-    New-Item -ItemType Directory -Path "C:\trp" | Out-Null
+# Ensure trp directory exists in the user's home folder
+if (-not (Test-Path $TrpDir)) {
+    New-Item -ItemType Directory -Path $TrpDir | Out-Null
 }
 
-# Copy trp.py
-$trpScriptContent = @"
-$(Get-Content -Raw -Path "$PSScriptRoot\trp.py")
-"@
-Set-Content -Path $TrpPath -Value $trpScriptContent -Encoding UTF8
+# Download trp.py from GitHub
+Write-Host "Downloading trp.py..."
+Invoke-WebRequest -Uri $RepoURL -OutFile $TrpPath
 
-# Make trp executable
-Set-Content -Path $TrpExe -Value "@echo off`npython C:\trp\trp.py %*" -Encoding UTF8
+# Create a batch script for easier execution
+Set-Content -Path $TrpExe -Value "@echo off`npython `"$TrpPath`" %*" -Encoding UTF8
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 
-# Add auto-run to PowerShell profile
+# Ensure the auto-run function is added to PowerShell profile
 if (!(Test-Path $ProfilePath)) {
     New-Item -ItemType File -Path $ProfilePath -Force | Out-Null
 }
 
 $AutoRun = @"
+# Auto-run trp after every command
 function Prompt {
-    python C:\trp\trp.py
+    python $TrpPath
     "PS $($executionContext.SessionState.Path.CurrentLocation)> "
 }
 
+# Enable nvim autocompletion using trp errors
 Register-ArgumentCompleter -CommandName nvim -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
     if (Test-Path "$TrpErrors") {
@@ -45,9 +48,8 @@ Register-ArgumentCompleter -CommandName nvim -ScriptBlock {
 }
 "@
 
-if (!(Select-String -Path $ProfilePath -Pattern "trp.py")) {
+if (!(Select-String -Path $ProfilePath -Pattern "trp.py" -Quiet)) {
     Add-Content -Path $ProfilePath -Value $AutoRun
 }
 
 Write-Host "Installation complete. Restart PowerShell and try 'nvim <TAB>'!"
-
